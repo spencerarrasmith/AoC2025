@@ -14,7 +14,7 @@ list(SORT DAY_DIRS)
 
 foreach(DAY ${DAY_DIRS})
     if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${DAY})
-        add_executable(${DAY} ${DAY}/main.cpp)
+        add_executable(${DAY} ${DAY}/${DAY}.cpp)
         target_compile_features(${DAY} PRIVATE cxx_std_23)
         set_target_properties(${DAY} PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/${DAY}

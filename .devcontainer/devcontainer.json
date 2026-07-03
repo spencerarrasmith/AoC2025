@@ -1,11 +1,20 @@
 {
-  "name": "C++23",
+  "name": "aoc2025_dev",
+  "containerName": "aoc2025_dev",
   "build": { "dockerfile": "Dockerfile" },
   "remoteUser": "ubuntu",
+  "updateRemoteUserUID": false,
   "overrideCommand": true,
+
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/aoc2025,type=bind,consistency=cached",
+  "workspaceFolder": "/workspaces/aoc2025",
+  
   "customizations": {
     "vscode": {
-      "extensions": ["ms-vscode.cpptools", "ms-vscode.cmake-tools"]
+      "extensions": ["ms-vscode.cpptools", "ms-vscode.cmake-tools"],
+      "settings": {
+        "C_Cpp.default.cppStandard": "c++23"
+      }
     }
   }
 }
