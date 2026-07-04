@@ -12,12 +12,16 @@ add_subdirectory(core)
 file(GLOB DAY_DIRS RELATIVE "${CMAKE_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}/day*")
 list(SORT DAY_DIRS)
 
-foreach(DAY ${DAY_DIRS})
-    if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${DAY})
-        add_executable(${DAY} ${DAY}/${DAY}.cpp)
-        target_compile_features(${DAY} PRIVATE cxx_std_23)
-        set_target_properties(${DAY} PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/${DAY}
-        )
+foreach(DAY_DIR ${DAY_DIRS})
+  if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/${DAY_DIR}")
+    file(GLOB DAY_SOURCES "${CMAKE_SOURCE_DIR}/${DAY_DIR}/*.cpp")
+    if(DAY_SOURCES)
+      add_executable(${DAY_DIR} ${DAY_SOURCES})
+      target_link_libraries(${DAY_DIR} PRIVATE core)
+      set_target_properties(${DAY_DIR} PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/${DAY_DIR}"
+      )
+      target_include_directories(${DAY_DIR} PRIVATE "${CMAKE_SOURCE_DIR}/core/include")
     endif()
+  endif()
 endforeach()
