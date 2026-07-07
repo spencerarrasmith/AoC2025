@@ -9,20 +9,35 @@ namespace fs = std::filesystem;
 class Dial {
     public:
         void spin(std::string dir, int val) {
+            
             if (dir == "L") {
-                position -= val;
+                for (int i=0; i<val; i++) {
+                    position--;
+                    if (position < 0) {
+                        position += 100;
+                    }
+                    if (position == 0) {
+                        p2password++;
+                    }
+                }
             }
             else {
-                position += val;
-            }
-            position %= 100;
-            if (position < 0) {
-                position += 100;
+                for (int i=0; i<val; i++) {
+                    position++;
+                    if (position > 99) {
+                        position -= 100;
+                    }
+                    if (position == 0) {
+                        p2password++;
+                    }
+
+                }
             }
 
             if (position == 0) {
-                password++;
+                p1password++;
             }
+
             return;
         };
 
@@ -31,31 +46,57 @@ class Dial {
             return position;
         };
 
-        int getPassword(void) {
-            std::println("Pass: {}", password);
-            return password;
+        int getP1(void) {
+            std::println("P1: {}", p1password);
+            return p1password;
+        };
+
+        int getP2(void) {
+            std::println("P2: {}", p2password);
+            return p2password;
         };
     
     private:
         int position = 50;
-        int password = 0;
+        int p1password = 0;
+        int p2password = 0;
 };
 
-
-int main(int argc, char* argv[]) {
-    const auto args = Args::parse(std::span(argv, argc));
-
+void p1(std::ifstream& file) {
     // Dial starts at 50
     Dial dial;
 
-    std::ifstream file{args.mInput};
-    
     std::string line;
     while (std::getline(file, line)) {
         //std::println("{}", line);
         //std::println("{}", (line.substr(0,1)=="L"));
         dial.spin(line.substr(0,1), std::stoi(line.substr(1)));
     }
-    dial.getPassword();
+    dial.getP1();
+    return;
+}
 
+void p2(std::ifstream& file) {
+    // Dial starts at 50
+    Dial dial;
+
+    std::string line;
+    while (std::getline(file, line)) {
+        dial.spin(line.substr(0,1), std::stoi(line.substr(1)));
+    }
+    dial.getP2();
+    return;
+}
+
+int main(int argc, char* argv[]) {
+    const auto args = Args::parse(argc, argv);
+
+    std::ifstream file{args.mInput};
+
+    if (args.mPart == 1) {
+        p1(file);
+    }
+    if (args.mPart == 2) {
+        p2(file);
+    }
 }
