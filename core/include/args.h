@@ -1,10 +1,9 @@
 #pragma once
-
-#include <span>
 #include <string>
 
 struct Args {
+    int mPart;
     std::string mInput;
 
-    static Args parse(std::span<char*> argv);
+    static Args parse(int argc, char* const argv[]);
 };
