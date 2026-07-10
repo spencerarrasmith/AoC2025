@@ -99,4 +99,5 @@ int main(int argc, char* argv[]) {
     if (args.mPart == 2) {
         p2(file);
     }
+    file.close();
 }
