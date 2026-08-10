@@ -12,6 +12,4 @@ make day1
 ```
 
 ## Running
-`./day1/day1`
-
-TODO: standardize each day with an argument for which input file it ingests
+`day1 -p1 -f input.txt`
