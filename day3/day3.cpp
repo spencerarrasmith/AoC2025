@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <print>
 #include <vector>
+#include <algorithm>
 
 #include "args.h"
 
@@ -62,7 +63,33 @@ void p1(std::ifstream& file) {
 }
 
 void p2(std::ifstream& file) {
-    std::println("p2");
+    std::string line;
+
+    uint64_t joltage_sum = 0;
+
+    while (std::getline(file, line)) {
+        for (int i=12; i>0; i--) {
+            std::string digit = "9";
+            
+            if (line.length() > 12) {
+                while (line.substr(12-i, line.length()-(i-1)-(12-i)).find(digit) == std::string::npos) {
+                    // decrement int-as-string
+                    digit[0]--;
+                }
+                auto pos = line.substr(12-i, line.length()-(i-1)-(12-i)).find(digit) + (12-i);
+                line.erase(line.begin()+12-i, line.begin()+pos);
+            }
+            else {
+                break;
+            }
+        }
+        line.erase(line.begin()+12, line.end());
+        
+        //std::println("");
+        joltage_sum += std::stoll(line);
+    }
+
+    std::println("{}", joltage_sum);
 }
 
 int main(int argc, char* argv[]) {
