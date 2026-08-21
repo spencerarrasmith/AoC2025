@@ -142,10 +142,143 @@ void p1(std::ifstream& file) {
 }
 
 
-
-
 void p2(std::ifstream& file) {
-    std::println("p2");
+    std::string line;
+    int numRows = 0;
+    int numCols = 0;
+    while (std::getline(file, line)) {
+        numRows++;
+        if (numCols == 0) {
+            numCols = line.length()+1;  // include newline
+        }
+    }
+
+    file.clear();
+    file.seekg(0, file.end);
+    int fileSize = file.tellg();
+    file.seekg(0, file.beg);
+
+    std::string text(fileSize, '\0');
+    file.read(&text[0], fileSize);
+
+    int count = 0;
+    int count_prev = -1;
+
+    while(count != count_prev) {
+        for (int i=0; i<numRows; i++) {
+            if (i == 0) {
+                for (int j=0; j<numCols-1; j++) {
+                    if (text[i*numCols + j] != floor) {
+                        // @?
+                        // ??
+                        if (j == 0) {
+                            text[i*numCols + j] -= text[i*numCols + (j+1)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + j] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j+1)] != floor;
+                        }
+                        // ?@
+                        // ??
+                        else if (j == numCols - 2) {
+                            text[i*numCols + j] -= text[i*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + j] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j-1)] != floor;
+                        }
+                        // ?@?
+                        // ???
+                        else {
+                            text[i*numCols + j] -= text[i*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[i*numCols + (j+1)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j+1)] != floor;
+                        }
+                    }
+                }
+            }
+            else if (i == numRows-1) {
+                for (int j=0; j<numCols-1; j++) {
+                    if (text[i*numCols + j] != floor) {
+                        // ??
+                        // @?
+                        if (j == 0) {
+                            text[i*numCols + j] -= text[i*numCols + (j+1)] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + j] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + (j+1)] != floor;
+                        }
+                        // ??
+                        // ?@
+                        else if (j == numCols - 2) {
+                            text[i*numCols + j] -= text[i*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + j] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + (j-1)] != floor;
+                        }
+                        // ???
+                        // ?@?
+                        else {
+                            text[i*numCols + j] -= text[i*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[i*numCols + (j+1)] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + (j)] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + (j+1)] != floor;
+                        }
+                    }
+                }
+            }
+            else {
+                for (int j=0; j<numCols-1; j++) {
+                    if (text[i*numCols + j] != floor) {
+                        // ??
+                        // @?
+                        // ??
+                        if (j == 0) {
+                            text[i*numCols + j] -= text[(i-1)*numCols + j] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + (j+1)] != floor;
+                            text[i*numCols + j] -= text[i*numCols + (j+1)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + j] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j+1)] != floor;
+                        }
+                        // ??
+                        // ?@
+                        // ??
+                        else if (j == numCols - 2) {
+                            text[i*numCols + j] -= text[(i-1)*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + j] != floor;
+                            text[i*numCols + j] -= text[i*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + j] != floor;
+                        }
+                        // ???
+                        // ?@?
+                        // ???
+                        else {
+                            text[i*numCols + j] -= text[(i-1)*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + j] != floor;
+                            text[i*numCols + j] -= text[(i-1)*numCols + (j+1)] != floor;
+                            text[i*numCols + j] -= text[i*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[i*numCols + (j+1)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j-1)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j)] != floor;
+                            text[i*numCols + j] -= text[(i+1)*numCols + (j+1)] != floor;
+                        }
+                    }
+                }
+            }
+        }
+
+        count_prev = count;
+        for (int i=0; i<numRows; i++) {
+            for (int j=0; j<numCols; j++) {
+                if (text[i*numCols + j] >= '=') {
+                    count++;
+                    text[i*numCols + j] = '.'; // remove roll
+                }
+                else if (text[i*numCols + j] >= '0') {
+                    text[i*numCols + j] = '@'; // reset roll
+                }
+            }
+        }
+    }
+    std::println("{}", count);
 }
 
 int main(int argc, char* argv[]) {
